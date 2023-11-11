@@ -1,17 +1,17 @@
 // This is dbConnection.js
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const connectDb = async () => {
   try {
     const connect = await mongoose.connect(process.env.CONNECTION_STRING);
     console.log(
-      'Database connected: ',
+      "Database connected: ",
       connect.connection.host,
-      connect.connection.name
+      connect.connection.name,
     );
   } catch (err) {
     console.log(err);
-    console.log('error');
+    console.log("error");
     process.exit(1);
   }
 };

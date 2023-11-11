@@ -1,13 +1,13 @@
-/* eslint-disable max-len */
-
 const asyncHandler = require('express-async-handler');
+const Contact = require('../../models/contactModel');
 
 // @desc Get All Contacts
 // @route GET /api/contacts
 // @access public
 
 const getContacts = asyncHandler(async (req, res) => {
-  res.status(200).json({message: 'Get All Contacts'});
+  const contacts = await Contact.find();
+  res.status(200).json({contacts_data: contacts, message: 'Get All Contacts'});
 });
 
 // @desc Create New Contact
@@ -20,7 +20,9 @@ const createContact = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('All fields: name, email, phone is mandatory');
   }
-  res.status(201).json({message: 'Create Contact'});
+  const contact = await Contact.create({name, email, phone});
+
+  res.status(201).json({created_contact: contact, message: 'Create Contact'});
 });
 
 // @desc Get Contact
@@ -28,7 +30,16 @@ const createContact = asyncHandler(async (req, res) => {
 // @access public
 
 const getContact = asyncHandler(async (req, res) => {
-  res.status(200).json({message: `Get Contact for ${req.params.id}`});
+  const contact = await Contact.findById(req.params.id);
+  if (!contact) {
+    res.status(404);
+    throw new Error('Contact Not Found');
+  }
+
+  res.status(200).json({
+    searched_contact: contact,
+    message: `Get Contact for ${req.params.id}`,
+  });
 });
 
 // @desc Update Contact
@@ -36,7 +47,24 @@ const getContact = asyncHandler(async (req, res) => {
 // @access public
 
 const updateContact = asyncHandler(async (req, res) => {
-  res.status(200).json({message: `Update Contact for ${req.params.id}`});
+  const contact = await Contact.findById(req.params.id);
+  if (!contact) {
+    res.status(404);
+    throw new Error('Contact Not Found');
+  }
+
+  const updatedContact = await Contact.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
+      new: true,
+    }
+  );
+
+  res.status(200).json({
+    updated_contact: updatedContact,
+    message: `Updated Contact for ${req.params.id}`,
+  });
 });
 
 // @desc Delete Contact
@@ -44,7 +72,21 @@ const updateContact = asyncHandler(async (req, res) => {
 // @access public
 
 const deleteContact = asyncHandler(async (req, res) => {
-  res.status(200).json({message: `Delete Contact for ${req.params.id}`});
+  try {
+    const contact = await Contact.findByIdAndDelete(req.params.id);
+    if (!contact) {
+      res.status(404);
+      throw new Error('Contact Not Found');
+    }
+
+    res.status(200).json({
+      deleted_contact: contact,
+      message: `Deleted Contact for ${req.params.id}`,
+    });
+  } catch (error) {
+    console.error('Error deleting contact:', error);
+    res.status(500).json({error: 'Internal Server Error'});
+  }
 });
 
 module.exports = {
