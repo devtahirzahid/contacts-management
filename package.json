@@ -1,33 +1,25 @@
 {
-  "name": "be-contacts",
+  "name": "authentication",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "lint": "eslint .",
-    "format": "prettier --write ."
+    "start": "nodemon app.js",
+    "scss": "node-sass  public/scss/theme.scss  public/scss/css/style.css -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Tahir Zahid",
-  "license": "MIT",
+  "author": "Haseeb",
+  "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
     "express": "^4.18.2",
-    "express-async-handler": "^1.2.0",
-    "mongodb": "^6.2.0",
-    "mongoose": "^8.0.0"
-  },
-  "devDependencies": {
-    "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.1",
-    "eslint-plugin-react": "^7.33.2",
-    "nodemon": "^3.0.1",
-    "prettier": "^3.0.3"
-  },
-  "extends": [
-    "prettier"
-  ]
+    "express-flash": "^0.0.2",
+    "express-session": "^1.17.3",
+    "method-override": "^3.0.0",
+    "mongoose": "^7.5.2",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0"
+  }
 }
